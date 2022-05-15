@@ -1,4 +1,4 @@
 module.exports.login = (req, res) => {
-    console.log(req.body)
-    res.send("HELLO from login");
+    // console.log(req.headers)
+    res.send(req.headers);
 }
