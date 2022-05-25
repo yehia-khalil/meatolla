@@ -13,7 +13,7 @@ async function store(req, res) {
         });
     } catch (err) {
         // res.json(err)
-        res.json(Object.entries(handleErrors(err)).length ? handleErrors(err): err);
+        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err): err);
     }
     res.json(category);
 }

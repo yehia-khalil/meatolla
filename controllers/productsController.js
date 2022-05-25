@@ -1,13 +1,8 @@
 const { handleErrors } = require("../helpers/handleErrors");
 const Product = require("../models/Product");
 
-function index(req, res) {
-    res.json({
-        data: [{
-            id: "1",
-            name: "first item wohoo"
-        }]
-    });
+async function index(req, res) {
+    res.json(await Product.find({}).populate("category"));
 }
 
 async function store(req, res) {
@@ -18,8 +13,7 @@ async function store(req, res) {
             "category": req.body.category
         });
     }catch(err){
-        // console.log(err)
-        res.status(422).json(handleErrors(err));
+        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err): err);
     }
     res.json(product);
 
