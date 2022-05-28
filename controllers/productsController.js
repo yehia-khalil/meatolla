@@ -23,7 +23,9 @@ async function store(req, res) {
         product = await Product.create({
             "name": req.body.name,
             "category": req.body.category,
-            "productImage": `${process.env.HOST}/${req.files['productImage'][0].path}`
+            "productImage": `${process.env.HOST}/${req.files['productImage'][0].path}`,
+            "price": req.body.price,
+            "quantity": req.body.quantity
         });
     } catch (err) {
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : err);

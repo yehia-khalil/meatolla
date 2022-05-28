@@ -19,6 +19,14 @@ const productSchema = new Schema({
     productImage: {
         type: String,
         required: [true, "Please select an image."]
+    },
+    price: {
+        type: Number,
+        required: [true, "Please enter product price."]
+    },
+    quantity: {
+        type: Number,
+        required: [true, "Please enter available product quantity."]
     }
 });
 
