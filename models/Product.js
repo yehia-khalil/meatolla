@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+var uniqueValidator = require('mongoose-unique-validator');
 const refIsValid = require("../helpers/refIsValid");
 const Category = require("./Category");
 const Schema = mongoose.Schema;
@@ -6,17 +7,27 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
     name: {
         type: String,
-        required: [true, "Product name is required."]
+        required: [true, "Product name is required."],
+        minLength: [2, "Product name should be at least 2 characters long."],
+        unique: true
     },
     category: {
         type: Schema.Types.ObjectId,
         ref: "Category",
         required: [true, "Product category is required."]
+    },
+    productImage: {
+        type: String,
+        required: [true, "Please select an image."]
     }
 });
 
+productSchema.plugin(uniqueValidator);
+
 productSchema.path("category").validate(function (value) {
-    return refIsValid(value,Category);
+    return refIsValid(value, Category);
 }, "Invalid Category.");
 
-module.exports = mongoose.model("Product", productSchema)
+const Product = mongoose.model("Product", productSchema)
+
+module.exports = Product;

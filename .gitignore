@@ -105,3 +105,6 @@ dist
 
 # Schema folder
 Schema
+
+# Uploads folder
+uploads

@@ -18,6 +18,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
+app.use('/uploads', express.static('uploads'));
 
 //api routes module
 app.use("/api/v1", apiRoutes);
