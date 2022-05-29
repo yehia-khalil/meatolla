@@ -30,7 +30,7 @@ const productSchema = new Schema({
     }
 });
 
-productSchema.plugin(uniqueValidator);
+productSchema.plugin(uniqueValidator, {message: 'Product {PATH} should be unique'});
 
 productSchema.path("category").validate(function (value) {
     return refIsValid(value, Category);
