@@ -5,6 +5,7 @@ const Product = require("../models/Product");
 const {
     validationResult
 } = require('express-validator');
+const { handleValidationErrors } = require("../helpers/handleValidationErrors");
 
 async function index(req, res) {
     res.json(await Product.find({}).populate("category"));
@@ -13,9 +14,7 @@ async function index(req, res) {
 async function store(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({
-            errors: errors.array()
-        });
+        return res.status(422).json(handleValidationErrors(errors.mapped()));
     }
 
     let product;
@@ -30,7 +29,7 @@ async function store(req, res) {
     } catch (err) {
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : err);
     }
-    res.json(product);
+    res.json(await product.populate("category"));
 }
 
 module.exports = {
