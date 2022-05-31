@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const apiRoutes = require("./routes/api");
 const mongoose = require('mongoose');
+const helmet = require("helmet");
 require('dotenv').config();
 const PORT = process.env.PORT;
 const dbURI = process.env.DB_URI;
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
+app.use(helmet());
 app.use('/uploads', express.static('uploads'));
 
 //api routes module
