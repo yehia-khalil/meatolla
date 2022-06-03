@@ -35,13 +35,6 @@ var upload = multer({
 
 router.get("/", productsController.index);
 
-router.post("/", upload.fields([{
-  name: 'productImage'
-}]), [productRequest.name,
-  productRequest.category,
-  productRequest.image,
-  productRequest.price,
-  productRequest.quantity
-], productsController.store);
+router.post("/", upload.single("productImage"), productRequest.schema, productsController.store);
 
 module.exports = router;

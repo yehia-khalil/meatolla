@@ -1,16 +1,28 @@
-const {body, checkSchema} = require("express-validator");
+const {checkSchema} = require("express-validator");
 
-module.exports.name = body('name').isString().withMessage("Please enter a valid name.");
-module.exports.category = body('category').isString().withMessage("Please choose a valid category.");
-module.exports.price = body('price').isInt().withMessage("Price must be a number.");
-module.exports.quantity = body('quantity').isInt().withMessage("Quantity must be a number");
-module.exports.image = checkSchema({
+module.exports.schema = checkSchema({
     'productImage': {
         custom: {
             options: (value, { req, path }) => {
-                return !!req.files[path]
+                return req.file.fieldname === path
             },
             errorMessage: 'You should upload an image',
         },
-    }
+    },
+    'name':{
+        isString: true,
+        errorMessage: "Please enter a valid name.",
+    },
+    'category':{
+        isString: true,
+        errorMessage: "Please choose a valid category."
+    },
+    'price':{
+        isInt: true,
+        errorMessage: "Price must be a number."
+    },
+    'quantity':{
+        isInt: true,
+        errorMessage: "Product quantity must be a number."
+    },
 });
