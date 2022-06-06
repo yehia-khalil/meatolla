@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-var uniqueValidator = require('mongoose-unique-validator');
+const uniqueValidator = require('mongoose-unique-validator');
 const refIsValid = require("../helpers/refIsValid");
 const Category = require("./Category");
 const Schema = mongoose.Schema;
