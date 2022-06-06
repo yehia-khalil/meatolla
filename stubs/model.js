@@ -6,3 +6,6 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     
 });
+
+const Model = mongoose.model("Model", schema);
+module.exports= Model;
