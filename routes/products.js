@@ -11,7 +11,7 @@ var storage = multer.diskStorage({
     cb(null, './uploads')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname)
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname))
   }
 })
 const fileFilter = (req, file, cb) => {
@@ -34,9 +34,9 @@ var upload = multer({
 
 
 router.get("/", productsController.index);
-router.get("/:productId", productsController.show);
+router.get("/:id", productsController.show);
 
 router.post("/", upload.single("productImage"), productRequest.schema, productsController.store);
-router.put("/:productId", upload.single("productImage"), productRequest.schema, productsController.update);
-
+router.put("/:id", upload.single("productImage"), productRequest.schema, productsController.update);
+router.delete("/:id", productsController.destroy)
 module.exports = router;

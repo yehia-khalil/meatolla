@@ -35,9 +35,24 @@ async function store(req, res) {
 }
 
 async function show(req, res) {
-    res.status(200).json(await Product.find({
-        _id: req.params.productId
-    }));
+    try {
+        let product = await Product.findOne({
+            _id: req.params.id
+        });
+        if (!product) throw Error("Not Found");
+        res.json(product);
+    } catch (err) {
+        if (err.kind === "ObjectId" || err.message == "Not Found") {
+            res.status(404).json({
+                product: "Not Found"
+            });
+            return;
+        }
+        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
+            message: err.message
+        });
+        return;
+    }
 }
 
 async function update(req, res) {
@@ -47,28 +62,63 @@ async function update(req, res) {
         quantity,
         category
     } = req.body;
-    let product;
+    let image = `${process.env.HOST}/${req.file?.path}`;
+    let product = Product.findOne({
+        _id: req.params.id
+    });
     try {
-        product = await Product.findByIdAndUpdate(req.params.productId, {
+        product = await Product.findByIdAndUpdate(req.params.id, {
             $set: {
                 name,
                 price,
                 quantity,
-                category
+                category,
+                productImage: req.file?.path ? image : product.productImage
             }
         }, {
             new: true,
             runValidators: true
         });
+
+        if (!product) throw Error("Not Found")
     } catch (err) {
-        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : err);
+        if (err.kind === "ObjectId" || err.message == "Not Found") {
+            res.status(404).json({
+                category: "Not Found"
+            });
+        }
+        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
+            message: err.message
+        });
+        return;
     }
-    res.json(await product.populate("category"))
+    res.json(await product.populate("category"));
+}
+
+async function destroy(req, res) {
+    try {
+        let product = await Product.deleteOne({
+            _id: req.params.id
+        });
+        if (!product) throw Error("Not Found")
+    } catch (err) {
+        if (err.kind === "ObjectId" || err.message == "Not Found") {
+            res.status(404).json({
+                category: "Not Found"
+            });
+        }
+        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
+            message: err.message
+        });
+        return;
+    }
+    res.status(200).send("Deleted successfulyl!");
 }
 
 module.exports = {
     index,
     store,
     update,
-    show
+    show,
+    destroy
 }

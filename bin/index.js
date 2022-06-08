@@ -23,10 +23,17 @@ const modelStub = () => {
     }).toString()
 };
 
+const controllerStub = () => {
+    return fs.readFileSync(process.cwd() + `/stubs/controller.js`, function (err, data) {
+        return data;
+    }).toString()
+};
+
 let methods = {
     create: (fileType, fileName) => {
         let rStub = requestStub();
         let mStub = modelStub();
+        let cStub = controllerStub();
         switch (fileType) {
             case "request":
                 fs.stat(process.cwd() + `/requests/${fileName}.js`, function (err, success) {
@@ -54,7 +61,7 @@ let methods = {
                         console.log(clc.red("Cotnroller already exists"));
                     } else if (err.code === 'ENOENT') {
                         // file does not exist
-                        fs.writeFile(process.cwd() + `/controllers/${fileName}.js`, "", function (err) {
+                        fs.writeFile(process.cwd() + `/controllers/${fileName}.js`, cStub, function (err) {
                             if (err) {
                                 console.log(err.code)
                                 return false;
