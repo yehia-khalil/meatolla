@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         default: USER
     },
     age: Number,
-    homoeNumber: Number
+    homeNumber: Number
 });
 const User = mongoose.model('User', userSchema);
 module.exports = {

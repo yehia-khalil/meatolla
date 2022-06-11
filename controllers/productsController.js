@@ -84,7 +84,7 @@ async function update(req, res) {
     } catch (err) {
         if (err.kind === "ObjectId" || err.message == "Not Found") {
             res.status(404).json({
-                category: "Not Found"
+                product: "Not Found"
             });
         }
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
@@ -104,7 +104,7 @@ async function destroy(req, res) {
     } catch (err) {
         if (err.kind === "ObjectId" || err.message == "Not Found") {
             res.status(404).json({
-                category: "Not Found"
+                product: "Not Found"
             });
         }
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {

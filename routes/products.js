@@ -38,5 +38,6 @@ router.get("/:id", productsController.show);
 
 router.post("/", upload.single("productImage"), productRequest.schema, productsController.store);
 router.put("/:id", upload.single("productImage"), productRequest.schema, productsController.update);
-router.delete("/:id", productsController.destroy)
+router.delete("/:id", productsController.destroy);
+
 module.exports = router;

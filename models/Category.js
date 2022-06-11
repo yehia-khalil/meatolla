@@ -12,7 +12,8 @@ const categorySchema = new Schema({
         virtuals: true
     },
     toObject: {
-        virtuals: true
+        virtuals: true,
+        getters: true
     },
     id: false,
 });
