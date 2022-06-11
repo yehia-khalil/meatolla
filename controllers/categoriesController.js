@@ -2,7 +2,7 @@ const { handleErrors } = require("../helpers/handleErrors");
 const Category = require("../models/Category");
 
 async function index(req, res) {
-    res.json(await Category.find({}));
+    res.json(await Category.find({},{__v:0}).populate("products"));
 }
 
 async function store(req, res) {
