@@ -47,7 +47,9 @@ async function store(req, res) {
             "name": req.body.name
         });
     } catch (err) {
-        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : err);
+        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
+            message: err.message
+        });
     }
     res.json(category);
 }
