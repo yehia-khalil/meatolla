@@ -36,7 +36,15 @@ module.exports.schema = checkSchema({
         },
         errorMessage: "Please enter your age between 10 and 100 years."
     },
-    password:{
+    birthDay: {
+        isDate: {
+            options: {
+                format: 'DD/MM/YYYY'
+            }
+        },
+        errorMessage: "Please choose your birthday."
+    },
+    password: {
         isStrongPassword: true,
         errorMessage: "Please choose a strong password with minimum length of 8 charecters."
     }

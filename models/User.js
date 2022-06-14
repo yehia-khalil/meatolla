@@ -30,16 +30,15 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     age: Number,
+    birthDay: {
+        type: Date,
+        required: true
+    },
     homeNumber: Number
 });
 
 userSchema.plugin(uniqueValidator, {
     message: 'User {PATH} should be unique'
-});
-
-userSchema.pre('save', function (next) {
-    console.log(this);
-    next();
 });
 
 const User = mongoose.model('User', userSchema);
