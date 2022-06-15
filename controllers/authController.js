@@ -11,31 +11,30 @@ const {
     handleErrors
 } = require("../helpers/handleErrors");
 const hashPassword = require("../helpers/hashPassword")
-
+const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
 
 async function login(req, res) {
-    let {
-        email,
-        password
-    } = req.body;
+    let { email, password } = req.body;
+    let user;
     try {
-
-        let user = await User.findOne({
+        user = await User.findOne({
             email
         });
-        console.log(user)
         let result = await bcrypt.compare(password, user.password);
-
         if (!user || !result) throw Error("Wrong email or password");
+
     } catch (err) {
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
             message: err.message
         });
         return;
     }
-
-    res.json("Login success")
+    let token = User.generateToken(user);
+    res.json({
+        token,
+        expiresIn: Number(process.env.TOKEN_LIFE_TIME)
+    });
 }
 
 
@@ -44,16 +43,7 @@ async function register(req, res) {
     if (!errors.isEmpty()) {
         return res.status(422).json(handleValidationErrors(errors.mapped()));
     }
-    let {
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        age,
-        homeNumber,
-        password,
-        birthDay
-    } = req.body
+    let { firstName, lastName, email, phoneNumber, age, homeNumber, password, birthDay } = req.body
     let user;
     password = await hashPassword(password);
     try {

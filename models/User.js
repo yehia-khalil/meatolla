@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const uniqueValidator = require('mongoose-unique-validator');
 const ADMIN = 1;
 const USER = 2;
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -40,6 +41,18 @@ const userSchema = new mongoose.Schema({
 userSchema.plugin(uniqueValidator, {
     message: 'User {PATH} should be unique'
 });
+
+userSchema.statics.generateToken = function (user) {
+    let jwtSecretKey = process.env.JWT_SECRET_KEY;
+    let data = {
+        time: Date(),
+        user,
+    }
+    const token = jwt.sign(data, jwtSecretKey, {
+        expiresIn: Number(process.env.TOKEN_LIFE_TIME),
+    });
+    return token;
+}
 
 const User = mongoose.model('User', userSchema);
 
