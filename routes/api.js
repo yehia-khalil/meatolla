@@ -3,17 +3,16 @@ const router = express.Router();
 const authRoutes = require("./auth");
 const productsRoutes = require("./products");
 const categoriesRoutes = require("./categories");
-
-router.get("/asd", (req, res) => {
-    res.send("H")
-});
+const {
+    authenticated: Authenticated
+} = require("../middlewares/Auth")
 
 
 //Routing Modules
 
 //auth routing module
 router.use("/auth", authRoutes);
-router.use("/products", productsRoutes);
-router.use("/categories", categoriesRoutes);
+router.use("/products", Authenticated, productsRoutes);
+router.use("/categories", Authenticated, categoriesRoutes);
 
 module.exports = router;

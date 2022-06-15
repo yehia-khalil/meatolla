@@ -4,7 +4,10 @@ const productsController = require("../controllers/productsController");
 const productRequest = require("../requests/productRequest");
 const multer = require("multer");
 const path = require("path");
-
+const {
+  checkRole
+} = require("../middlewares/Auth");
+const { ADMIN } = require("../models/User");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -36,8 +39,8 @@ var upload = multer({
 router.get("/", productsController.index);
 router.get("/:id", productsController.show);
 
-router.post("/", upload.single("productImage"), productRequest.schema, productsController.store);
-router.put("/:id", upload.single("productImage"), productRequest.schema, productsController.update);
+router.post("/", upload.single("productImage"), checkRole(ADMIN), productRequest.schema, productsController.store);
+router.put("/:id", upload.single("productImage"), checkRole(ADMIN), productRequest.schema, productsController.update);
 router.delete("/:id", productsController.destroy);
 
 module.exports = router;
