@@ -24,8 +24,8 @@ async function authenticated(req, res, next) {
 function checkRole(userRole) {
     return function (req, res, next) {
         let token = req.get('x-access-token');
-        let { role } = jwt_decode(token);
-        if (role != userRole) {
+        let { user } = jwt_decode(token);
+        if (user.role != userRole) {
             res.status(403).json("Not Authorized");
             return;
         }

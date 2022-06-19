@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const uniqueValidator = require('mongoose-unique-validator');
 const refIsValid = require("../helpers/refIsValid");
 const Schema = mongoose.Schema;
-const User = require("./User");
+const { User } = require("./User");
 const CASH = 1;
 const CREDIT = 2;
 
@@ -17,8 +17,9 @@ const schema = new Schema({
         ref: "Product",
         required: [true, "Order must containt products."]
     }],
-    subtotal: {
-        type: Number
+    subTotal: {
+        type: Number,
+        required: true
     },
     modeOfPayment: {
         type: Number,

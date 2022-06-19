@@ -58,7 +58,7 @@ async function update(req, res) {
     let category = await Category.findById(req.params.id);
     try {
         category.name = req.body.name ? req.body.name : category.name;
-        category.save();
+        await category.save();
         if (!category) throw Error("Not Found")
     } catch (err) {
         if (err.kind === "ObjectId" || err.message == "Not Found") {

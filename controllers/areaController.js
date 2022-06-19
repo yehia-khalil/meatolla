@@ -41,7 +41,7 @@ async function update(req, res) {
     try {
         area.name = req.body.name ? req.body.name : area.name;
         area.deliveryPrice = req.body.deliveryPrice ? req.body.deliveryPrice : area.deliveryPrice
-        area.save();
+        await area.save();
         if (!area) throw Error("Not Found")
     } catch (err) {
         if (err.kind === "ObjectId" || err.message == "Not Found") {
