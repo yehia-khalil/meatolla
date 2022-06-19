@@ -1,39 +1,20 @@
 const {
     handleErrors
 } = require("../helpers/handleErrors");
-const Category = require("../models/Category");
 const {
     validationResult
 } = require('express-validator');
 const {
     handleValidationErrors
 } = require("../helpers/handleValidationErrors");
+const Area = require("../models/Area");
 
 async function index(req, res) {
-    res.json(await Category.find({}, {
-        __v: 0
-    }).populate("products"));
+    res.json(await Area.find({}));
 }
 
 async function show(req, res) {
-    try {
-        let category = await Category.findOne({
-            _id: req.params.id
-        });
-        if (!category) throw Error("Not Found");
-        res.json(category);
-    } catch (err) {
-        if (err.kind === "ObjectId" || err.message == "Not Found") {
-            res.status(404).json({
-                category: "Not Found"
-            });
-            return;
-        }
-        res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
-            message: err.message
-        });
-        return;
-    }
+
 }
 
 async function store(req, res) {
@@ -41,29 +22,31 @@ async function store(req, res) {
     if (!errors.isEmpty()) {
         return res.status(422).json(handleValidationErrors(errors.mapped()));
     }
-    let category;
+    let area;
     try {
-        category = await Category.create({
-            "name": req.body.name
+        area = await Area.create({
+            name: req.body.name,
+            deliveryPrice: req.body.deliveryPrice
         });
     } catch (err) {
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
             message: err.message
         });
     }
-    res.json(category);
+    res.json(area);
 }
 
 async function update(req, res) {
-    let category = await Category.findById(req.params.id);
+    let area = await Area.findById(req.params.id);
     try {
-        category.name = req.body.name ? req.body.name : category.name;
-        category.save();
-        if (!category) throw Error("Not Found")
+        area.name = req.body.name ? req.body.name : area.name;
+        area.deliveryPrice = req.body.deliveryPrice ? req.body.deliveryPrice : area.deliveryPrice
+        area.save();
+        if (!area) throw Error("Not Found")
     } catch (err) {
         if (err.kind === "ObjectId" || err.message == "Not Found") {
             res.status(404).json({
-                product: "Not Found"
+                area: "Not Found"
             });
         }
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
@@ -71,23 +54,30 @@ async function update(req, res) {
         });
         return;
     }
-    res.json(category);
+    res.json(area);
 }
 
 async function destroy(req, res) {
     try {
-        let category = await Category.findOne({
+        let area = await Area.findOne({
             _id: req.params.id
-        }).populate("products");
-        if (category.products.length > 0) {
-            throw Error("Cannot delete category.")
+        }).populate("users");
+        if (category.users.length > 0) {
+            throw Error("Cannot delete area.")
         }
-        category.remove();
+        area.remove();
     } catch (err) {
-        if (err.kind === "ObjectId" || err.message == "Not Found") {
+        if (err.kind === "ObjectId") {
             res.status(404).json({
-                product: "Not Found"
+                area: "Not Found"
             });
+            return;
+        }
+        if (err.message == "Cannot delete area.") {
+            res.status(422).json({
+                area: err.message
+            });
+            return;
         }
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {
             message: err.message
@@ -102,5 +92,5 @@ module.exports = {
     show,
     store,
     update,
-    destroy,
+    destroy
 }

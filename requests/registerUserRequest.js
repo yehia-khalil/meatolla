@@ -47,5 +47,25 @@ module.exports.schema = checkSchema({
     password: {
         isStrongPassword: true,
         errorMessage: "Please choose a strong password with minimum length of 8 charecters."
+    },
+    area: {
+        isString: true,
+        errorMessage: "Please choose your area."
+    },
+    streetName: {
+        isString: true,
+        errorMessage: "Please choose your street name."
+    },
+    buildingNumber: {
+        isInt: true,
+        errorMessage: "Please choose your building number."
+    },
+    floor: {
+        isInt: true,
+        errorMessage: "Please choose your floor."
+    },
+    apartment: {
+        isInt: true,
+        errorMessage: "Please choose your apartment."
     }
 });
