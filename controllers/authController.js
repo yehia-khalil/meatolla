@@ -43,9 +43,12 @@ async function register(req, res) {
     if (!errors.isEmpty()) {
         return res.status(422).json(handleValidationErrors(errors.mapped()));
     }
-    let { firstName, lastName, email, phoneNumber, age, homeNumber, password, birthDay } = req.body
+
+    let { firstName, lastName, email, phoneNumber, age, homeNumber, password,
+        birthDay, area, streetName, buildingNumber, floor, apartment } = req.body
     let user;
     password = await hashPassword(password);
+    
     try {
         user = await User.create({
             firstName,
@@ -55,7 +58,12 @@ async function register(req, res) {
             password,
             age,
             homeNumber,
-            birthDay
+            birthDay, 
+            area, 
+            streetName, 
+            buildingNumber, 
+            floor, 
+            apartment
         });
     } catch (err) {
         res.status(422).json(Object.entries(handleErrors(err)).length ? handleErrors(err) : {

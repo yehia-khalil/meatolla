@@ -3,6 +3,8 @@ const uniqueValidator = require('mongoose-unique-validator');
 const ADMIN = 1;
 const USER = 2;
 const jwt = require('jsonwebtoken');
+const Area = require("./Area");
+const refIsValid = require("../helpers/refIsValid");
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -35,7 +37,28 @@ const userSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    homeNumber: Number
+    homeNumber: Number,
+    area: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Area",
+        required: [true, "Please choose your area."]
+    },
+    streetName: {
+        type: String,
+        required: [true, "Please choose street name."]
+    },
+    buildingNumber: {
+        type: Number,
+        required: [true, "Please choose building number."]
+    },
+    floor: {
+        type: Number,
+        required: [true, "Please choose your floor."]
+    },
+    apartment: {
+        type: Number,
+        erquired: [true, "Please choose appartment number."]
+    }
 });
 
 userSchema.plugin(uniqueValidator, {
@@ -53,6 +76,10 @@ userSchema.statics.generateToken = function (user) {
     });
     return token;
 }
+
+userSchema.path("area").validate(function (value) {
+    return refIsValid(value, Area);
+}, "Invalid Area");
 
 const User = mongoose.model('User', userSchema);
 
