@@ -10,6 +10,7 @@ const {
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const { User } = require("../models/User");
+const jwt_decode = require("jwt-decode");
 
 
 
@@ -29,10 +30,11 @@ async function store(req, res) {
     }
     let quantities;
     let products;
-    let user;
     let order;
     let total;
-    let { userId, productsId } = req.body;
+    let { productsId } = req.body;
+    let { user } = jwt_decode(req.get('x-access-token'));
+    let { _id: userId } = user;
     try {
         quantities = {};
         req.body.productsId.forEach(element => {
@@ -48,7 +50,7 @@ async function store(req, res) {
         total = products.reduce(function (prev, current) {
             return prev + current.price
         }, 0);
-        user = await User.findById(req.body.userId).populate("area");
+        user = await User.findById(userId).populate("area");
         order = await Order.create({
             user: userId,
             products: productsId,

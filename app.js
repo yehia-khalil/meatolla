@@ -27,7 +27,7 @@ app.use('/uploads', express.static('uploads'));
 app.use("/api/v1", apiRoutes);
 
 //database connection and server bootstrapping
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 mongoose
     .connect(dbURI)
     .then(() => {
