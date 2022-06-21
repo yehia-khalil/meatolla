@@ -15,7 +15,7 @@ const { User } = require("../models/User");
 
 
 async function index(req, res) {
-    res.json(await (await Order.find({}).populate("user products")))
+    res.json(await (await Order.find({}).populate("user products", "email name productImage")))
 }
 
 async function show(req, res) {
