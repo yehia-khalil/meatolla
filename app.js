@@ -12,7 +12,8 @@ const dbURI = process.env.DB_URI;
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
@@ -26,7 +27,7 @@ app.use('/uploads', express.static('uploads'));
 app.use("/api/v1", apiRoutes);
 
 //database connection and server bootstrapping
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 mongoose
     .connect(dbURI)
     .then(() => {
