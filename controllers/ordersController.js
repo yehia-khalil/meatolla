@@ -41,12 +41,7 @@ async function store(req, res) {
             quantities[element] = quantities[element] ? quantities[element] + 1 : 1;
         });
         products = await (Product.find({ _id: { $in: req.body.productsId } }, "_id name quantity price"));
-        for (let item of products) {
-            if (item.quantity < quantities[item._id]) {
-                throw Error(`${item.name} quantity exceeds maximum available amount`)
-            }
-        }
-        if (Object.keys(quantities).length != products.length) throw Error("Some products were not found");
+        validateProducts(products, quantities);
         total = products.reduce(function (prev, current) {
             return prev + current.price
         }, 0);
@@ -81,8 +76,6 @@ async function store(req, res) {
     res.json(order)
 }
 
-
-
 async function update(req, res) {
 
 }
@@ -99,4 +92,14 @@ module.exports = {
     store,
     update,
     destroy
+}
+
+function validateProducts(products, quantities) {
+    for (let item of products) {
+        if (item.quantity < quantities[item._id]) {
+            throw Error(`${item.name} quantity exceeds maximum available amount`);
+        }
+    }
+    if (Object.keys(quantities).length != products.length)
+        throw Error("Some products were not found");
 }
