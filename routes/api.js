@@ -5,6 +5,7 @@ const productsRoutes = require("./products");
 const categoriesRoutes = require("./categories");
 const ordersRoutes = require("./orders");
 const areasRoutes = require("./areas");
+const cartsRoutes = require("./carts");
 const {
     authenticated: Authenticated
 } = require("../middlewares/Auth")
@@ -18,5 +19,6 @@ router.use("/products", Authenticated, productsRoutes);
 router.use("/categories", Authenticated, categoriesRoutes);
 router.use("/orders", Authenticated, ordersRoutes);
 router.use("/areas", Authenticated, areasRoutes);
+router.use("/carts", Authenticated, cartsRoutes);
 
 module.exports = router;

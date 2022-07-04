@@ -7,9 +7,10 @@ const {
 const {
     handleValidationErrors
 } = require("../helpers/handleValidationErrors");
+const Cart = require(".././models/Cart");
 
 async function index(req, res) {
-
+    res.json(await Cart.find({}).populate("user products", "email name productImage"));
 }
 async function show(req, res) {
 
